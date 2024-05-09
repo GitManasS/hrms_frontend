@@ -1,0 +1,34 @@
+<!-- holidays.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Holidays</title>
+</head>
+<body>
+  <h1>Holidays</h1>
+  <div id="holidays-list"></div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', async function() {
+      // Retrieve holiday data from localStorage
+      const holidaysData = JSON.parse(localStorage.getItem('holidays'));
+
+      // Display holiday data
+      const holidaysList = document.getElementById('holidays-list');
+      if (holidaysData && holidaysData.length > 0) {
+        holidaysData.forEach(holiday => {
+          const holidayElement = document.createElement('p');
+          holidayElement.textContent = `Date: ${holiday.date}, Description: ${holiday.description}`;
+          holidaysList.appendChild(holidayElement);
+        });
+      } else {
+        const noHolidaysElement = document.createElement('p');
+        noHolidaysElement.textContent = 'No holidays available';
+        holidaysList.appendChild(noHolidaysElement);
+      }
+    });
+  </script> 
+</body>
+</html>

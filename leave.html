@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Leave History</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container mt-5">
+        <h2>Leave History</h2>
+        <div id="leaveData"></div>
+    </div>
+
+    <!-- Bootstrap JS (must be included after jQuery) -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script>
+        // Function to extract URL parameter by name
+        function getUrlParameter(name) {
+            name = name.replace(/[[]/, '\\[').replace(/[\]]/, '\\]');
+            var regex = new RegExp('[\\?&]' + name + '=([^&#]*)');
+            var results = regex.exec(location.search);
+            return results === null ? '' : decodeURIComponent(results[1].replace(/\+/g, ' '));
+        }
+
+        // Fetch leave data for the employee
+        var employeeID = getUrlParameter('employee_id');
+        fetch('http://localhost:8080/employees/leaves/' + employeeID)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Failed to fetch leave data');
+                }
+                return response.json();
+            })
+            .then(data => {
+                // Display leave data in the UI (e.g., in a table)
+                var leaveDataHtml = '<table class="table">';
+                leaveDataHtml += '<thead><tr><th>Leave ID</th><th>Start Date</th><th>End Date</th><th>Leave Type</th><th>Status</th><th>Reason</th></tr></thead>';
+                leaveDataHtml += '<tbody>';
+                data.forEach(leave => {
+                    leaveDataHtml += '<tr>';
+                    leaveDataHtml += '<td>' + leave.leave_id + '</td>';
+                    leaveDataHtml += '<td>' + leave.start_date + '</td>';
+                    leaveDataHtml += '<td>' + leave.end_date + '</td>';
+                    leaveDataHtml += '<td>' + leave.leave_type + '</td>';
+                    leaveDataHtml += '<td>' + leave.status + '</td>';
+                    leaveDataHtml += '<td>' + leave.reason + '</td>';
+                    leaveDataHtml += '</tr>';
+                });
+                leaveDataHtml += '</tbody></table>';
+                document.getElementById('leaveData').innerHTML = leaveDataHtml;
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Failed to fetch leave data. Please try again.');
+            });
+    </script>
+</body>
+</html>

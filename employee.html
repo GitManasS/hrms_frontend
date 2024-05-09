@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Employee Management</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header bg-primary text-white">
+                    <h3 class="text-center">Add Employee</h3>
+                </div>
+                <div class="card-body">
+                    <form id="employeeForm">
+                        <div class="form-group">
+                            <label for="firstName">First Name</label>
+                            <input type="text" class="form-control" id="firstName" placeholder="Enter First Name">
+                        </div>
+                        <div class="form-group">
+                            <label for="lastName">Last Name</label>
+                            <input type="text" class="form-control" id="lastName" placeholder="Enter Last Name">
+                        </div>
+                        <div class="form-group">
+                            <label for="birthDate">Birth Date</label>
+                            <input type="text" class="form-control" id="birthDate" placeholder="Enter Birth Date">
+                        </div>
+                        <div class="form-group">
+                            <label for="contactInfo">Contact Info</label>
+                            <input type="text" class="form-control" id="contactInfo" placeholder="Enter Contact Info">
+                        </div>
+                        <div class="form-group">
+                            <label for="departmentID">Department ID</label>
+                            <input type="number" class="form-control" id="departmentID" placeholder="Enter Department ID">
+                        </div>
+                        <div class="form-group">
+                            <label for="hireDate">Hire Date</label>
+                            <input type="text" class="form-control" id="hireDate" placeholder="Enter Hire Date">
+                        </div>
+                        <div class="form-group">
+                            <label for="position">Position</label>
+                            <input type="text" class="form-control" id="position" placeholder="Enter Position">
+                        </div>
+                        <div class="form-group">
+                            <label for="department">Department</label>
+                            <input type="text" class="form-control" id="department" placeholder="Enter Department">
+                        </div>
+                        <div class="form-group">
+                            <label for="username">Username</label>
+                            <input type="text" class="form-control" id="username" placeholder="Enter Username">
+                        </div>
+                        <div class="form-group">
+                            <label for="password">Password</label>
+                            <input type="password" class="form-control" id="password" placeholder="Enter Password">
+                        </div>
+                        <div class="form-group">
+                            <label for="emailID">Email ID</label>
+                            <input type="email" class="form-control" id="emailID" placeholder="Enter Email ID">
+                        </div>
+                        <button type="submit" class="btn btn-primary btn-block">Add Employee</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Bootstrap JS (must be included after jQuery) -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+
+<script>
+    document.getElementById('employeeForm').addEventListener('submit', function(event) {
+        event.preventDefault(); // Prevent the form from submitting
+
+        // Get form data
+        var formData = {
+        firstName: document.getElementById('firstName').value,
+        lastName: document.getElementById('lastName').value,
+        birthDate: document.getElementById('birthDate').value,
+        contactInfo: document.getElementById('contactInfo').value,
+        departmentID: document.getElementById('departmentID').value,
+        hireDate: document.getElementById('hireDate').value,
+        position: document.getElementById('position').value,
+        department: document.getElementById('department').value,
+        username: document.getElementById('username').value,
+        password: document.getElementById('password').value,
+        emailID: document.getElementById('emailID').value
+    };
+    console.log("form data is",formData);
+
+
+        // Send POST request to the server
+        fetch('http://localhost:8080/employees', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(formData)
+        })
+        .then(response => {
+            console.log("Response:", response);
+            if (response.ok) {
+                // Redirect to another page or show a success message
+                window.location.href = 'after_login.html';
+            } else {
+                throw new Error('Failed to add employee');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('Failed to add employee. Please try again.');
+        });
+    });
+</script>
+
+</body>
+</html>

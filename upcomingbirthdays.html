@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Upcoming Birthdays</title>
+</head>
+<body>
+  <h1>Upcoming Birthdays</h1>
+  <div id="birthdays-list"></div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', async function() {
+      // Retrieve birthday data from localStorage
+      const birthdaysData = JSON.parse(localStorage.getItem('birthdays'));
+
+      // Display birthday data
+      const birthdaysList = document.getElementById('birthdays-list');
+      if (birthdaysData && birthdaysData.length > 0) {
+        birthdaysData.forEach(birthday => {
+          const birthdayElement = document.createElement('p');
+          birthdayElement.textContent = `Name: ${birthday.name}, Date: ${birthday.birth_date}`;
+          birthdaysList.appendChild(birthdayElement);
+        });
+      } else {
+        const noBirthdaysElement = document.createElement('p');
+        noBirthdaysElement.textContent = 'No upcoming birthdays available';
+        birthdaysList.appendChild(noBirthdaysElement);
+      }
+    });
+  </script>
+</body>
+</html>

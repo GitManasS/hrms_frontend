@@ -1,0 +1,649 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>HRMS Portal</title>
+    <!-- Bootstrap CSS -->
+    <link
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <!-- Font Awesome -->
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"
+      rel="stylesheet"
+    />
+    <!-- Custom CSS -->
+    <style>
+      /* Custom styles */
+      body {
+        font-family: "Roboto", sans-serif;
+        background-color: #f8f9fa;
+      }
+      .navbar {
+        background-color: #343a40;
+        position: fixed;
+        width: 100%;
+        z-index: 1000;
+        top: 0px;
+      }
+      .navbar-brand {
+        font-weight: 700;
+        color: #fff;
+      }
+      .navbar-nav .nav-item .nav-link {
+        color: #fff;
+      }
+      .navbar-nav .nav-item .nav-link:hover {
+        color: #ccc;
+      }
+      .flag-icon {
+        font-size: 24px;
+        color: #fff;
+      }
+      .skidos-info {
+        background-color: #789b9f;
+        padding: 50px;
+        border-radius: 10px;
+        margin-top: 15px;
+      }
+      .skidos-info img {
+        max-width: 100%;
+        border-radius: 40px;
+      }
+      .custom-img {
+        width: 500px;
+        height: 300px;
+      }
+      .content {
+        padding-top: 20px;
+        margin-top: 150px; /* Adjust as needed */
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+      }
+      .features {
+        margin-left: 40px;
+        padding: 20px;
+      }
+
+      .welcomemsg {
+        position: relative;
+        left: 170px;
+        font-size: 25px;
+        font-family: "Franklin Gothic Medium", "Arial Narrow", Arial, sans-serif;
+      }
+      .spotlight-item img {
+        height: 200px; /* Adjust the height as needed */
+        object-fit: cover;
+      }
+      #spotlightSection h2 {
+        font-weight: 700;
+      }
+      .footer {
+        background-color: #343a40;
+        color: #fff;
+        padding: 20px 0;
+        position: relative;
+        bottom: 0;
+        width: 100%;
+        text-align: center;
+      }
+      .footer p {
+        margin-bottom: 0;
+      }
+      /* Sidebar styles */
+      .sidebar {
+        position: fixed;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        z-index: 100;
+        background-color: #343a40;
+        padding-top: 50px;
+        width: 200px; /* Adjust width as needed */
+      }
+      .sidebar h5 {
+        position: fixed;
+        color: #f8f9fa; /* White color for company name */
+        top: 10px; /* Add space after the company name */
+        left: 55px;
+      }
+      .sidebar img {
+        width: 140px;
+        height: 140px;
+        border-radius: 50%;
+        margin-bottom: 10px; /* Add space after the image */
+      }
+      .sidebar h4 {
+        color: #fff; /* White color for employee name */
+        margin-bottom: 50px; /* Add space after the employee name */
+      }
+      .sidebar .nav-link {
+        color: #fff;
+      }
+      .sidebar .nav-link:hover {
+        color: #ccc;
+      }
+      .logout {
+        position: absolute;
+        bottom: 30px;
+        left: -20px;
+        width: 100%;
+        text-align: center;
+      }
+
+      .spotlight-item img {
+        height: 200px; /* Adjust the height as needed */
+        object-fit: cover;
+      }
+
+      #spotlightSection h2 {
+        font-weight: 700;
+      }
+
+      /* Custom CSS to shift Spotlight section to the right */
+      #spotlightSection {
+        margin-left: 250px; /* Adjust this value to shift the Spotlight section */
+      }
+
+      .footer {
+        background-color: #343a40;
+        color: #fff;
+        padding: 20px 0;
+        position: relative;
+        bottom: 0;
+        width: 100%;
+        text-align: center;
+      }
+      .footer p {
+        margin-bottom: 0;
+      }
+      /* FAQ Section */
+      .faq-question {
+        cursor: pointer;
+        padding: 10px 0;
+        border-bottom: 1px solid #ccc;
+      }
+      .faq-answer {
+        display: none;
+      }
+      /* Custom CSS to shift FAQ section to the right */
+      #coverfaq {
+        margin-left: 50px; /* Adjust this value to shift the FAQ section */
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Sidebar -->
+    <div class="sidebar">
+      <div class="container">
+        <h5 class="text-white mb-4">Skidos</h5>
+        <img src="images/image3.jpeg" alt="Employee" />
+        <h4>Manas Gupta</h4>
+        <ul class="nav flex-column">
+          <li class="nav-item">
+            <a class="nav-link" href="#"><i class="fas fa-home"></i> Home</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#"
+              ><i class="fas fa-tasks"></i> Features</a
+            >
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#"
+              ><i class="fas fa-info-circle"></i> About</a
+            >
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#"
+              ><i class="fas fa-project-diagram"></i> Projects</a
+            >
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#"
+              ><i class="fas fa-phone"></i> Contact Us</a
+            >
+          </li>
+        </ul>
+        <div class="logout">
+          <a href="#"><i class="fas fa-sign-out-alt"></i> Logout</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- features section -->
+    <div class="features">
+      <div class="welcomemsg">Welcome, Manas Gupta!</div>
+      <div class="container mt-5">
+        <div class="row">
+          <div class="col-lg-4">
+            <div class="card mb-3" onclick="redirectToEmployeeForm()">
+              <div class="card-body">
+                <h5 class="card-title">Employee Management</h5>
+                <p class="card-text">
+                  Manage your employees efficiently with our HRMS portal.
+                </p>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-4">
+            <div class="card mb-3">
+              <div class="card-body">
+                <h5 class="card-title"><a href="upcomingbirthdays.html" id="birthday-card">Upcoming Birthdays</a></h5>
+                <p class="card-text">
+                  Never miss an employee's birthday with our reminder system.
+                </p>
+              </div>
+            </div>
+          </div>
+         <!-- <div class="col-lg-4">
+            <div class="card mb-3">
+              <div class="card-body">
+                <h5 class="card-title">Salary Slip</h5>
+                <p class="card-text">
+                  View and download your monthly salary slip.
+                </p>
+              </div>
+            </div>
+          </div> -->
+          <div class="col-lg-4">
+            <div class="card mb-3">
+                <div class="card-body">
+                    <h5 class="card-title">Leave</h5>
+                    <p class="card-text">
+                        View leave history for a specific employee.
+                    </p>
+                    <form id="leaveForm">
+                        <div class="form-group">
+                            <label for="employeeID">Employee ID</label>
+                            <input type="number" class="form-control" id="employeeID" placeholder="Enter Employee ID" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary btn-block">Fetch Leave History</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+        
+          <div class="col-lg-4">
+            <div class="card mb-3">
+              <div class="card-body">
+                <h5 class="card-title">Leaves</h5>
+                <p class="card-text">
+                  Track and manage leave requests seamlessly.
+                </p>
+              </div>
+            </div>
+          </div>
+<div class="col-lg-4">
+    <div class="card mb-3" id="holiday-card">
+      <div class="card-body">
+        <h5 class="card-title"><a href="holidays.html" id="holidays-link">Holidays</a></h5>
+        <div id="holiday-card-text">
+          <p class="card-text">
+            Stay updated with company holidays and schedules.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+        </div>
+    </div>
+    </div>
+
+    <!-- Spotlight Section -->
+    <div id="spotlightSection" class="container mt-5">
+      <div class="row justify-content-center">
+        <div class="col-md-8 text-center">
+          <h2>Moments Gallery</h2>
+        </div>
+      </div>
+      <div
+        id="spotlightCarousel"
+        class="carousel slide"
+        data-ride="carousel"
+        data-interval="false"
+      >
+        <div class="carousel-inner">
+          <div class="carousel-item active">
+            <div class="row">
+              <div class="col-md-4">
+                <div class="spotlight-item">
+                  <img
+                    src="images/image4.jpeg"
+                    class="d-block w-100"
+                    alt="Achievement 1"
+                  />
+                  <div class="carousel-caption d-none d-md-block">
+                    <p>Achievement 1</p>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-4">
+                <div class="spotlight-item">
+                  <img
+                    src="images/image2.jpeg"
+                    class="d-block w-100"
+                    alt="Achievement 2"
+                  />
+                  <div class="carousel-caption d-none d-md-block">
+                    <p>Achievement 2</p>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-4">
+                <div class="spotlight-item">
+                  <img
+                    src="images/image3.jpeg"
+                    class="d-block w-100"
+                    alt="Achievement 3"
+                  />
+                  <div class="carousel-caption d-none d-md-block">
+                    <p>Achievement 3</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="carousel-item">
+            <div class="row">
+              <div class="col-md-4">
+                <div class="spotlight-item">
+                  <img
+                    src="images/image5.jpeg"
+                    class="d-block w-100"
+                    alt="Achievement 4"
+                  />
+                  <div class="carousel-caption d-none d-md-block">
+                    <p>Achievement 4</p>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-4">
+                <div class="spotlight-item">
+                  <img
+                    src="images/image6.jpeg"
+                    class="d-block w-100"
+                    alt="Achievement 5"
+                  />
+                  <div class="carousel-caption d-none d-md-block">
+                    <p>Achievement 5</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <a
+          class="carousel-control-prev"
+          href="#spotlightCarousel"
+          role="button"
+          data-slide="prev"
+        >
+          <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+          <span class="sr-only">Previous</span>
+        </a>
+        <a
+          class="carousel-control-next"
+          href="#spotlightCarousel"
+          role="button"
+          data-slide="next"
+        >
+          <span class="carousel-control-next-icon" aria-hidden="true"></span>
+          <span class="sr-only">Next</span>
+        </a>
+      </div>
+    </div>
+
+    <!-- FAQ Section -->
+    <div class="container mt-5">
+      <div class="row">
+        <div class="col-md-12" id="coverfaq">
+          <h2>General FAQs</h2>
+          <!-- Added heading -->
+          <div class="accordion" id="faqAccordion">
+            <div class="card">
+              <div class="card-header" id="faqHeading1">
+                <h5 class="mb-0">
+                  <button
+                    class="btn btn-link faq-question"
+                    type="button"
+                    data-toggle="collapse"
+                    data-target="#faqCollapse1"
+                    aria-expanded="true"
+                    aria-controls="faqCollapse1"
+                  >
+                    If I have a problem, how long does it take to get support?
+                  </button>
+                </h5>
+              </div>
+              <div
+                id="faqCollapse1"
+                class="collapse"
+                aria-labelledby="faqHeading1"
+                data-parent="#faqAccordion"
+              >
+                <div class="card-body">
+                  There is 9 to 7 PM IST support available and it takes anywhere
+                  between 24 to 48 hours to resolve an issue.
+                </div>
+              </div>
+            </div>
+            <div class="card">
+              <div class="card-header" id="faqHeading2">
+                <h5 class="mb-0">
+                  <button
+                    class="btn btn-link faq-question"
+                    type="button"
+                    data-toggle="collapse"
+                    data-target="#faqCollapse2"
+                    aria-expanded="true"
+                    aria-controls="faqCollapse2"
+                  >
+                    How can I see my data on HRMS?
+                  </button>
+                </h5>
+              </div>
+              <div
+                id="faqCollapse2"
+                class="collapse"
+                aria-labelledby="faqHeading2"
+                data-parent="#faqAccordion"
+              >
+                <div class="card-body">
+                  By logging into the HRMS portal. If you don't have an account,
+                  register first, then login.
+                </div>
+              </div>
+            </div>
+            <div class="card">
+              <div class="card-header" id="faqHeading3">
+                <h5 class="mb-0">
+                  <button
+                    class="btn btn-link faq-question"
+                    type="button"
+                    data-toggle="collapse"
+                    data-target="#faqCollapse3"
+                    aria-expanded="true"
+                    aria-controls="faqCollapse3"
+                  >
+                    How secure is your software?
+                  </button>
+                </h5>
+              </div>
+              <div
+                id="faqCollapse3"
+                class="collapse"
+                aria-labelledby="faqHeading3"
+                data-parent="#faqAccordion"
+              >
+                <div class="card-body">
+                  Digital HRMS offers multi-level advanced security features to
+                  ensure maximum security of user data. It is comprised of the
+                  following:
+                  <ul>
+                    <li>
+                      Server Security: Information is hosted on Microsoft Azure
+                      Cloud, monitored 24x7 by world-class professionals.
+                    </li>
+                    <li>
+                      Data Encryption: 256-bit SSL encryption software – a
+                      high-end encryption technology used in the BFSI industry.
+                    </li>
+                    <li>
+                      Security Protocol: Stringent IP & Port-based restrictions
+                      with communication over SSL protocol under ISO 20001, GDPR
+                      & Country-specific security standards.
+                    </li>
+                    <li>
+                      Information Availability: Reliable disaster recovery and
+                      continuous information flow with 99.9% cloud uptime
+                      availability.
+                    </li>
+                    <li>
+                      Multi-Layered Backup: Systematic backup of data in
+                      multiple locations and backup updates throughout the day.
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+            <div class="card">
+              <div class="card-header" id="faqHeading4">
+                <h5 class="mb-0">
+                  <button
+                    class="btn btn-link faq-question"
+                    type="button"
+                    data-toggle="collapse"
+                    data-target="#faqCollapse4"
+                    aria-expanded="true"
+                    aria-controls="faqCollapse4"
+                  >
+                    What to do if I forget my password?
+                  </button>
+                </h5>
+              </div>
+              <div
+                id="faqCollapse4"
+                class="collapse"
+                aria-labelledby="faqHeading4"
+                data-parent="#faqAccordion"
+              >
+                <div class="card-body">
+                  You can reset the password through the forgot password option
+                  on the Digital HRMS login page.
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+      <div class="container">
+        <p>&copy; 2024 Skidos HRMS. All rights reserved.</p>
+        <p>Contact Us: hrms_skidos@skidos.com | +91 20 66532111</p>
+        <p>Skidos, Noida</p>
+        <p>GLOBAL PRESENCE: USA | CANADA | INDIA | FIJI | VIETNAM</p>
+        <p>QUICK CONTACT</p>
+        <p>
+          Your Name | Email Address | Your Comment | How did you hear about us?
+          | I agree to the Privacy Policy and consent to sharing my information.
+          To know more refer to our Privacy Policy. | Product & Copyright By
+          Logo Footer
+        </p>
+      </div>
+    </footer>
+
+    <!-- Bootstrap JS and dependencies -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+
+<!-- Custom JavaScript for fetching upcoming holidays and updating UI -->
+<!-- Custom JavaScript for fetching upcoming holidays and updating UI -->
+<script>
+    document.addEventListener('DOMContentLoaded', async function() {
+      // Function to fetch holidays from backend and display in a new page
+      const fetchAndDisplayHolidays = async () => {
+        console.log('Fetching holidays...');
+        try {
+          const response = await fetch('http://localhost:8080/holidays');
+          if (!response.ok) {
+            throw new Error('Network response was not ok');
+          }
+          const data = await response.json();
+          console.log('Holidays fetched successfully:', data);
+          // Redirect to holidays.html
+          window.location.href = 'holidays.html';
+          // Store holiday data in localStorage
+          localStorage.setItem('holidays', JSON.stringify(data));
+        } catch (error) {
+          console.error('Error fetching holidays:', error);
+        }
+      };
+    
+      // Add event listener to the holiday card to fetch holidays when clicked
+      const holidayCard = document.querySelector('#holiday-card');
+      holidayCard.addEventListener('click', (event) => {
+        event.preventDefault(); // Prevent default anchor tag behavior
+        fetchAndDisplayHolidays();
+      });
+    });
+
+//fetching upcming birthdays 
+document.addEventListener('DOMContentLoaded', async function() {
+    // Function to fetch upcoming birthdays from backend and display in a new page
+    const fetchAndDisplayBirthdays = async () => {
+        console.log('Fetching upcoming birthdays...');
+        try {
+            const response = await fetch('http://localhost:8080/birthdays');
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            const data = await response.json();
+            console.log('Birthdays fetched successfully:', data);
+            // Store birthday data in localStorage
+            localStorage.setItem('birthdays', JSON.stringify(data));
+            // Redirect to upcomingbirthdays.html
+            window.location.href = 'upcomingbirthdays.html';
+        } catch (error) {
+            console.error('Error fetching birthdays:', error);
+        }
+    };
+
+    // Add event listener to the birthday card to fetch birthdays when clicked
+    const birthdayCard = document.querySelector('#birthday-card');
+    birthdayCard.addEventListener('click', (event) => {
+        event.preventDefault(); // Prevent default anchor tag behavior
+        fetchAndDisplayBirthdays();
+    });
+});
+
+//redirect to employee.html page
+function redirectToEmployeeForm() {
+        window.location.href = 'employee.html';
+    }
+
+//showing leave detail of entered employeeid
+    document.getElementById('leaveForm').addEventListener('submit', function(event) {
+        event.preventDefault(); // Prevent the form from submitting
+
+        // Get employee ID from the form
+        var employeeID = document.getElementById('employeeID').value;
+
+        // Redirect to leave.html with employee ID as parameter
+        window.location.href = 'leave.html?employee_id=' + encodeURIComponent(employeeID);
+    });
+
+
+    </script>
+    
+  </body>
+
+</html>
