@@ -238,6 +238,20 @@
               </div>
             </div>
           </div>
+
+          <div class="col-lg-4">
+            <div class="card mb-3" id="holiday-card">
+              <div class="card-body">
+                <h5 class="card-title"><a href="holidays.html" id="holidays-link">Holidays</a></h5>
+                <div id="holiday-card-text">
+                  <p class="card-text">
+                    Stay updated with company holidays and schedules.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        
          <!-- <div class="col-lg-4">
             <div class="card mb-3">
               <div class="card-body">
@@ -252,12 +266,12 @@
             <div class="card mb-3">
                 <div class="card-body">
                     <h5 class="card-title">Leave</h5>
-                    <p class="card-text">
+                    <!-- <p class="card-text">
                         View leave history for a specific employee.
-                    </p>
+                    </p> -->
                     <form id="leaveForm">
                         <div class="form-group">
-                            <label for="employeeID">Employee ID</label>
+                            <!-- <label for="employeeID">Employee ID</label> -->
                             <input type="number" class="form-control" id="employeeID" placeholder="Enter Employee ID" required>
                         </div>
                         <button type="submit" class="btn btn-primary btn-block">Fetch Leave History</button>
@@ -266,29 +280,35 @@
             </div>
         </div>
         
-          <div class="col-lg-4">
+        <div class="col-lg-4">
+            <div class="card mb-3">
+                <div class="card-body">
+                    <h5 class="card-title">Salary Slip</h5>
+                    <!-- <p class="card-text">
+                        Track and manage salary requests seamlessly.
+                    </p> -->
+                    <form id="salaryForm">
+                        <div class="form-group">
+                            <!-- <label for="employeeID">Employee ID</label> -->
+                            <input type="number" class="form-control" id="employeeID" placeholder="Enter Employee ID" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary btn-block">Fetch Salary Slip</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+        
+        
+          <!-- <div class="col-lg-4">
             <div class="card mb-3">
               <div class="card-body">
-                <h5 class="card-title">Leaves</h5>
+                <h5 class="card-title">Salary Slip</h5>
                 <p class="card-text">
-                  Track and manage leave requests seamlessly.
+                  Track and manage salary requests seamlessly.
                 </p>
               </div>
             </div>
-          </div>
-<div class="col-lg-4">
-    <div class="card mb-3" id="holiday-card">
-      <div class="card-body">
-        <h5 class="card-title"><a href="holidays.html" id="holidays-link">Holidays</a></h5>
-        <div id="holiday-card-text">
-          <p class="card-text">
-            Stay updated with company holidays and schedules.
-          </p>
-        </div>
-      </div>
-    </div>
-  </div>
-  
+          </div> -->  
         </div>
     </div>
     </div>
@@ -630,16 +650,93 @@ function redirectToEmployeeForm() {
         window.location.href = 'employee.html';
     }
 
-//showing leave detail of entered employeeid
+ //leave form
     document.getElementById('leaveForm').addEventListener('submit', function(event) {
         event.preventDefault(); // Prevent the form from submitting
 
-        // Get employee ID from the form
+        // Get employee ID entered by the user
         var employeeID = document.getElementById('employeeID').value;
+        console.log("employee_id:",employeeID)
 
-        // Redirect to leave.html with employee ID as parameter
-        window.location.href = 'leave.html?employee_id=' + encodeURIComponent(employeeID);
+
+        // Send a GET request to the server to fetch leave history for the employee
+        fetch('http://localhost:8080/leave?employeeID=' + employeeID)
+
+        .then(response => {
+            console.log("response:",response)
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
+        })
+        .then(data => {
+            console.log("data is:",data)
+            // Redirect to leave.html and pass the leave history data as a query parameter
+            window.location.href = 'leave.html?employeeID=' + employeeID + '&leaveHistory=' + JSON.stringify(data);
+        })
+        .catch(error => {
+            console.error('There was a problem fetching leave history:', error);
+            alert('Failed to fetch leave history. Please try again.');
+        });
     });
+
+
+    //salary details
+    document.getElementById('salaryForm').addEventListener('submit', function(event) {
+        event.preventDefault(); // Prevent the form from submitting
+
+        // Get employee ID entered by the user
+        var employeeID = document.getElementById('employeeID').value;
+        console.log("employee_id:",employeeID)
+
+    // Send a GET request to the server to fetch salary details for the employee
+    try {
+        fetch('http://localhost:8080/employees/salary-slip?employeeID=' + employeeID)
+        .then(response => {
+            console.log("response",response)
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
+        })
+        .then(data => {
+            console.log("data",data)
+            // Redirect to salary.html and pass the salary details data as a query parameter
+            window.location.href = 'salary.html?employeeID=' + employeeID + '&salaryDetails=' + JSON.stringify(data);
+        })
+        .catch(error => {
+            console.error('There was a problem fetching salary details:', error);
+            alert('Failed to fetch salary details. Please try again.');
+        });
+    } catch (error) {
+        console.error('There was a problem with the fetch operation:', error);
+        alert('Failed to fetch salary details. Please try again.');
+    }
+});
+
+    // document.getElementById('salaryForm').addEventListener('submit', function(event) {
+    //     event.preventDefault(); // Prevent the form from submitting
+
+    //     // Get employee ID entered by the user
+    //     var employeeID = document.getElementById('employeeID').value;
+
+    //     // Send a GET request to the server to fetch leave history for the employee
+    //     fetch('http://localhost:8080/employees/salary-slip?employeeID=' + employeeID)
+    //     .then(response => {
+    //         if (!response.ok) {
+    //             throw new Error('Network response was not ok');
+    //         }
+    //         return response.json();
+    //     })
+    //     .then(data => {
+    //         // Redirect to leave.html and pass the leave history data as a query parameter
+    //         window.location.href = 'salary.html?employeeID=' + employeeID + '&salaryDetails=' + JSON.stringify(data);
+    //     })
+    //     .catch(error => {
+    //         console.error('There was a problem fetching leave history:', error);
+    //         alert('Failed to fetch leave history. Please try again.');
+    //     });
+    // });
 
 
     </script>

@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Salary Details</title>
+    <!-- Add any CSS or Bootstrap links here -->
+</head>
+<body>
+    <div class="container">
+        <h1>Salary Details</h1>
+        <div id="salaryDetailsContainer"></div>
+    </div>
+
+    <script>
+        // Function to parse query parameters from URL
+        function parseQueryParameters() {
+            var queryParams = {};
+            var queryString = window.location.search.substring(1);
+            var pairs = queryString.split('&');
+            for (var i = 0; i < pairs.length; i++) {
+                var pair = pairs[i].split('=');
+                queryParams[decodeURIComponent(pair[0])] = decodeURIComponent(pair[1]);
+            }
+            return queryParams;
+        }
+
+        // Function to display salary details
+        function displaySalaryDetails() {
+            var salaryDetailsContainer = document.getElementById('salaryDetailsContainer');
+
+            // Parse query parameters to extract employee ID and salary details
+            var queryParams = parseQueryParameters();
+            var employeeID = queryParams.employeeID;
+            var salaryDetails = JSON.parse(queryParams.salaryDetails);
+
+            // Construct HTML to display salary details
+            var html = '<table class="table table-bordered"><thead><tr><th>Salary ID</th><th>Month</th><th>Year</th><th>Basic Salary</th><th>Deduction</th><th>Net Salary</th></tr></thead><tbody>';
+            for (var i = 0; i < salaryDetails.length; i++) {
+                html += '<tr><td>' + salaryDetails[i].SalaryID + '</td><td>' + salaryDetails[i].Month + '</td><td>' + salaryDetails[i].Year + '</td><td>' + salaryDetails[i].BasicSalary + '</td><td>' + salaryDetails[i].Deduction + '</td><td>' + salaryDetails[i].NetSalary + '</td></tr>';
+            }
+            html += '</tbody></table>';
+
+            // Display salary details in the container
+            salaryDetailsContainer.innerHTML = html;
+        }
+
+        // Call the function to display salary details when the page loads
+        window.onload = displaySalaryDetails;
+    </script>
+</body>
+</html>

@@ -42,7 +42,7 @@
               <h3 class="text-center">Login</h3>
             </div>
             <div class="card-body">
-              <form>
+              <form id="loginForm">
                 <div class="form-group">
                   <label for="username">Username</label>
                   <input
@@ -71,7 +71,56 @@
       </div>
     </div>
 
-    <!-- Bootstrap JS (optional) -->
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<!-- jQuery -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<!-- Bootstrap JS (must be included after jQuery) -->
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+    <script>
+        document.getElementById('loginForm').addEventListener('submit', function(event) {
+            event.preventDefault(); // Prevent the form from submitting
+    
+            // Get form data
+            var formData = {
+                username: document.getElementById('username').value,
+                password: document.getElementById('password').value
+            };
+    
+            // Basic client-side validation
+            if (formData.username.trim() === '' || formData.password.trim() === '') {
+                alert('Please enter both username and password.');
+                return;
+            }
+    
+            // Send POST request to the server
+            fetch('http://localhost:8080/login', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(formData)
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+                if (data.success) {
+                    // Redirect to after_login.html if login is successful
+                    window.location.href = 'after_login.html';
+                } else {
+                    alert('Invalid username or password.');
+                }
+            })
+            .catch(error => {
+                console.error('There was a problem with the login request:', error);
+                alert('Failed to login. Please try again.');
+            });
+        });
+    </script>
+          
   </body>
 </html>
