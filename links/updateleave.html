@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Update Leave Request</title>
+</head>
+<body>
+    <div class="container">
+        <h1>Update Leave Request</h1>
+        <form id="updateLeaveForm">
+            <div class="form-group">
+                <label for="leaveID">Leave ID:</label>
+                <input type="text" class="form-control" id="leaveID" required>
+            </div>
+            <div class="form-group">
+                <label for="employeeID">Employee ID:</label>
+                <input type="text" class="form-control" id="employeeID" required>
+            </div>
+            <div class="form-group">
+                <label for="startDate">Start Date:</label>
+                <input type="date" class="form-control" id="startDate" required>
+            </div>
+            <div class="form-group">
+                <label for="endDate">End Date:</label>
+                <input type="date" class="form-control" id="endDate" required>
+            </div>
+            <div class="form-group">
+                <label for="leaveType">Leave Type:</label>
+                <input type="text" class="form-control" id="leaveType" required>
+            </div>
+            <div class="form-group">
+                <label for="status">Status:</label>
+                <input type="text" class="form-control" id="status" required>
+            </div>
+            <div class="form-group">
+                <label for="reason">Reason:</label>
+                <textarea id="reason" class="form-control" required></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary">Update Leave</button>
+        </form>
+    </div>
+
+    <script>
+        // Function to retrieve JWT token from local storage
+        function getToken() {
+            var token = localStorage.getItem('token');
+            if (!token) {
+                // Redirect to login page if token is missing
+                window.location.href = '../login.html';
+            }
+            return token;
+        }
+
+        // Function to update leave details
+        function updateLeave() {
+            var token = getToken();
+
+            // Get leave details from the form
+            var leaveID = document.getElementById('leaveID').value;
+            var employeeID = document.getElementById('employeeID').value;
+            var startDate = document.getElementById('startDate').value;
+            var endDate = document.getElementById('endDate').value;
+            var leaveType = document.getElementById('leaveType').value;
+            var status = document.getElementById('status').value;
+            var reason = document.getElementById('reason').value;
+
+            // Construct the leave object
+            var leaveData = {
+                start_date: startDate,
+                end_date: endDate,
+                leave_type: leaveType,
+                status: status,
+                reason: reason
+            };
+
+            // Send PUT request to update leave
+            fetch('http://localhost:8080/employees/' + employeeID + '/leaves/' + leaveID, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer ' + token
+                },
+                body: JSON.stringify(leaveData)
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Failed to update leave');
+                }
+                return response.json();
+            })
+            .then(updatedLeave => {
+                // Display success message
+                alert('Leave updated successfully');
+                // Redirect to leave history page or any other appropriate page
+                window.location.href = 'leave-history.html';
+            })
+            .catch(error => {
+                console.error('Error updating leave:', error);
+                // Display error message
+                alert('Failed to update leave. Please try again.');
+            });
+        }
+
+        // Event listener for form submission
+        document.getElementById('updateLeaveForm').addEventListener('submit', function(event) {
+            event.preventDefault(); // Prevent the form from submitting
+            updateLeave(); // Call function to update leave
+        });
+    </script>
+</body>
+</html>

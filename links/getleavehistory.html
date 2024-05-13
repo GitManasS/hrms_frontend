@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Leave History</title>
+</head>
+<body>
+    <div class="container">
+        <h1>Leave History</h1>
+        <form id="leaveHistoryForm">
+            <div class="form-group">
+                <label for="employeeID">Employee ID:</label>
+                <input type="number" class="form-control" id="employeeID" required>
+            </div>
+            <button type="submit" class="btn btn-primary">Fetch Leave History</button>
+        </form>
+        <div id="leaveHistoryContainer"></div>
+    </div>
+
+    <script>
+        // Function to retrieve JWT token from local storage
+        function getToken() {
+            var token = localStorage.getItem('token');
+            if (!token) {
+                // Redirect to login page if token is missing
+                window.location.href = '../login.html';
+            }
+            return token;
+        }
+
+        // Function to get leave history for the employee
+        function getLeaveHistory(employeeID) {
+            var token = getToken();
+
+            // Fetch leave history from the server with authentication
+            fetch('http://localhost:8080/employees/leaves/' + employeeID, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer ' + token
+                }
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Failed to fetch leave history');
+                }
+                return response.json();
+            })
+            .then(leaveHistory => {
+                // Construct HTML to display leave history
+                var html = '<h2>Leave History for Employee ID: ' + employeeID + '</h2>';
+                if (leaveHistory.length === 0) {
+                    html += '<p>No leave history found for this employee.</p>';
+                } else {
+                    html += '<ul>';
+                    leaveHistory.forEach(leave => {
+                        html += '<li>Leave ID: ' + leave.LeaveID + ', Start Date: ' + leave.StartDate + ', End Date: ' + leave.EndDate + ', Leave Type: ' + leave.LeaveType + ', Status: ' + leave.Status + ', Reason: ' + leave.Reason + '</li>';
+                    });
+                    html += '</ul>';
+                }
+
+                // Display leave history in the container
+                document.getElementById('leaveHistoryContainer').innerHTML = html;
+            })
+            .catch(error => {
+                console.error('Error fetching leave history:', error);
+                // Display error message in case of failure
+                document.getElementById('leaveHistoryContainer').textContent = 'Failed to fetch leave history. Please try again.';
+            });
+        }
+
+        // Event listener for form submission
+        document.getElementById('leaveHistoryForm').addEventListener('submit', function(event) {
+            event.preventDefault(); // Prevent the form from submitting
+
+            // Get employee ID from the form input
+            var employeeID = document.getElementById('employeeID').value;
+
+            // Call function to get leave history for the entered employee ID
+            getLeaveHistory(employeeID);
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Apply Leave</title>
+</head>
+<body>
+    <div class="container">
+        <h1>Apply Leave</h1>
+        <form id="leaveForm">
+            <div class="form-group">
+                <label for="employeeID">Employee ID:</label>
+                <input type="text" class="form-control" id="employeeID" required>
+            </div>
+            <div class="form-group">
+                <label for="startDate">Start Date:</label>
+                <input type="date" class="form-control" id="startDate" required>
+            </div>
+            <div class="form-group">
+                <label for="endDate">End Date:</label>
+                <input type="date" class="form-control" id="endDate" required>
+            </div>
+            <div class="form-group">
+                <label for="leaveType">Leave Type:</label>
+                <select id="leaveType" class="form-control" required>
+                    <option value="Sick Leave">Sick Leave</option>
+                    <option value="Vacation Leave">Vacation Leave</option>
+                    <option value="Maternity Leave">Maternity Leave</option>
+                    <!-- Add more options if needed -->
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="reason">Reason:</label>
+                <textarea id="reason" class="form-control" required></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary">Apply Leave</button>
+        </form>
+    </div>
+
+    <script>
+        // Function to apply leave
+        function applyLeave() {
+            // Get employee ID from input field
+            var employeeID = document.getElementById('employeeID').value;
+            console.log("employeeid:",employeeID)
+
+            // Get leave details from the form
+            var startDate = document.getElementById('startDate').value;
+            var endDate = document.getElementById('endDate').value;
+            var leaveType = document.getElementById('leaveType').value;
+            var reason = document.getElementById('reason').value;
+
+            // Construct the leave object
+            var leaveData = {
+                employee_id: parseInt(employeeID),
+                start_date: startDate,
+                end_date: endDate,
+                leave_type: leaveType,
+                reason: reason
+            };
+
+            // Send POST request to apply leave
+            fetch('http://localhost:8080/employees/leaves/' + employeeID, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(leaveData)
+            })
+            .then(response => {
+                console.log("response is",response)
+                if (!response.ok) {
+                    throw new Error('Failed to apply leave');
+                }
+                return response.text();
+            })
+            .then(message => {
+                // Display success message
+                alert(message);
+                // Redirect to employee details page
+                window.location.href = 'employee-details.html?employee_id=' + employeeID;
+            })
+            .catch(error => {
+                console.error('Error applying leave:', error);
+                // Display error message
+                alert('Failed to apply leave. Please try again.');
+            });
+        }
+
+        // Event listener for form submission
+        document.getElementById('leaveForm').addEventListener('submit', function(event) {
+            event.preventDefault(); // Prevent the form from submitting
+            applyLeave(); // Call function to apply leave
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Update Employee Details</title>
+</head>
+<body>
+    <div class="container">
+        <h1>Update Employee Details</h1>
+        <form id="updateEmployeeForm">
+            <div class="form-group">
+                <label for="employeeID">Employee ID:</label>
+                <input type="number" class="form-control" id="employeeID" required>
+            </div>
+            <div class="form-group">
+                <label for="firstName">First Name:</label>
+                <input type="text" class="form-control" id="firstName" required>
+            </div>
+            <div class="form-group">
+                <label for="lastName">Last Name:</label>
+                <input type="text" class="form-control" id="lastName" required>
+            </div>
+            <div class="form-group">
+                <label for="birthDate">Birth Date:</label>
+                <input type="date" class="form-control" id="birthDate" required>
+            </div>
+            <div class="form-group">
+                <label for="contactInfo">Contact Info:</label>
+                <input type="text" class="form-control" id="contactInfo" required>
+            </div>
+            <button type="submit" class="btn btn-primary">Update Details</button>
+        </form>
+    </div>
+
+    <script>
+        // Function to retrieve JWT token from local storage
+        function getToken() {
+            var token = localStorage.getItem('token');
+            if (!token) {
+                // Redirect to login page if token is missing
+                window.location.href = '../login.html';
+            }
+            return token;
+        }
+
+        // Function to update employee details
+        function updateEmployeeDetails() {
+            var token = getToken();
+
+            // Retrieve input values
+            var employeeID = document.getElementById('employeeID').value;
+            var firstName = document.getElementById('firstName').value;
+            var lastName = document.getElementById('lastName').value;
+            var birthDate = document.getElementById('birthDate').value;
+            var contactInfo = document.getElementById('contactInfo').value;
+
+            // Construct request body
+            var requestBody = {
+                "EmployeeID": parseInt(employeeID),
+                "FirstName": firstName,
+                "LastName": lastName,
+                "BirthDate": birthDate,
+                "ContactInfo": contactInfo
+            };
+
+            // Send PUT request to update employee details
+            fetch('http://localhost:8080/employees/details/' + employeeID, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer ' + token
+                },
+                body: JSON.stringify(requestBody)
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Failed to update employee details');
+                }
+                return response.json();
+            })
+            .then(updatedEmployee => {
+                // Display success message
+                alert('Employee details updated successfully.');
+                // Optionally, you can redirect to another page or update the UI.
+            })
+            .catch(error => {
+                console.error('Error updating employee details:', error);
+                // Display error message
+                alert('Failed to update employee details. Please try again.');
+            });
+        }
+
+        // Add event listener to the form submission
+        document.getElementById('updateEmployeeForm').addEventListener('submit', function(event) {
+            event.preventDefault(); // Prevent the form from submitting
+            updateEmployeeDetails();
+        });
+    </script>
+</body>
+</html>

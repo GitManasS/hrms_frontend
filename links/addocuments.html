@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Employee Documents</title>
+</head>
+<body>
+    <div class="container">
+        <h1>Add Employee Documents</h1>
+        <form id="documentUploadForm" enctype="multipart/form-data">
+            <div class="form-group">
+                <label for="employeeID">Employee ID:</label>
+                <input type="text" class="form-control" id="employeeID" required>
+            </div>
+            <div class="form-group">
+                <label for="aadhaarCard">Aadhaar Card:</label>
+                <input type="file" class="form-control" id="aadhaarCard" name="aadhaar_card" required>
+            </div>
+            <div class="form-group">
+                <label for="provisionalCertificate">Provisional Certificate:</label>
+                <input type="file" class="form-control" id="provisionalCertificate" name="provisional_certificate" required>
+            </div>
+            <div class="form-group">
+                <label for="profilePicture">Profile Picture:</label>
+                <input type="file" class="form-control" id="profilePicture" name="profile_picture" required>
+            </div>
+            <div class="form-group">
+                <label for="relievingLetter">Relieving Letter:</label>
+                <input type="file" class="form-control" id="relievingLetter" name="relieving_letter" required>
+            </div>
+            <div class="form-group">
+                <label for="salarySlip">Salary Slip:</label>
+                <input type="file" class="form-control" id="salarySlip" name="salary_slip" required>
+            </div>
+            <div class="form-group">
+                <label for="lastOfferLetterWithCTC">Last Offer Letter with CTC:</label>
+                <input type="file" class="form-control" id="lastOfferLetterWithCTC" name="last_offer_letter_with_ctc" required>
+            </div>
+            <button type="submit" class="btn btn-primary">Upload Documents</button>
+        </form>
+    </div>
+
+    <script>
+        // Function to retrieve JWT token from local storage
+        function getToken() {
+            var token = localStorage.getItem('token');
+            if (!token) {
+                // Redirect to login page if token is missing
+                window.location.href = '../login.html';
+            }
+            return token;
+        }
+
+        // Function to upload employee documents
+        function uploadEmployeeDocuments() {
+            // Get employee ID from the form
+            var employeeID = document.getElementById('employeeID').value;
+
+            // Create a FormData object to store form data
+            var formData = new FormData();
+
+            // Add files to FormData object
+            formData.append('employee_id', employeeID);
+            formData.append('aadhaar_card', document.getElementById('aadhaarCard').files[0]);
+            formData.append('provisional_certificate', document.getElementById('provisionalCertificate').files[0]);
+            formData.append('profile_picture', document.getElementById('profilePicture').files[0]);
+            formData.append('relieving_letter', document.getElementById('relievingLetter').files[0]);
+            formData.append('salary_slip', document.getElementById('salarySlip').files[0]);
+            formData.append('last_offer_letter_with_ctc', document.getElementById('lastOfferLetterWithCTC').files[0]);
+
+            // Send POST request to upload documents
+            fetch('http://localhost:8080/employee/documents/' + employeeID, {
+                method: 'POST',
+                headers: {
+                    'Authorization': 'Bearer ' + getToken()
+                },
+                body: formData
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Failed to upload documents');
+                }
+                return response.text();
+            })
+            .then(message => {
+                // Display success message
+                alert(message);
+            })
+            .catch(error => {
+                console.error('Error uploading documents:', error);
+                // Display error message
+                alert('Failed to upload documents. Please try again.');
+            });
+        }
+
+        // Event listener for form submission
+        document.getElementById('documentUploadForm').addEventListener('submit', function(event) {
+            event.preventDefault(); // Prevent the form from submitting
+            uploadEmployeeDocuments(); // Call function to upload employee documents
+        });
+    </script>
+</body>
+</html>

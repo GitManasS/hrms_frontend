@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Update Salary Details</title>
+</head>
+<body>
+    <div class="container">
+        <h1>Update Salary Details</h1>
+        <form id="salaryUpdateForm">
+            <div class="form-group">
+                <label for="employeeID">Employee ID:</label>
+                <input type="text" class="form-control" id="employeeID" required>
+            </div>
+            <div class="form-group">
+                <label for="salaryID">Salary ID:</label>
+                <input type="text" class="form-control" id="salaryID" required>
+            </div>
+            <div class="form-group">
+                <label for="month">Month:</label>
+                <input type="text" class="form-control" id="month" required>
+            </div>
+            <div class="form-group">
+                <label for="year">Year:</label>
+                <input type="number" class="form-control" id="year" required>
+            </div>
+            <div class="form-group">
+                <label for="basicSalary">Basic Salary:</label>
+                <input type="number" class="form-control" id="basicSalary" required>
+            </div>
+            <div class="form-group">
+                <label for="deduction">Deduction:</label>
+                <input type="number" class="form-control" id="deduction" required>
+            </div>
+            <button type="submit" class="btn btn-primary">Update Salary Details</button>
+        </form>
+    </div>
+
+    <script>
+        // Function to retrieve JWT token from local storage
+        function getToken() {
+            var token = localStorage.getItem('token');
+            if (!token) {
+                // Redirect to login page if token is missing
+                window.location.href = '../login.html';
+            }
+            return token;
+        }
+
+        // Function to update salary details
+        function updateSalaryDetails() {
+            var token = getToken();
+
+            // Get employee ID and salary ID from the form
+            var employeeID = document.getElementById('employeeID').value;
+            var salaryID = document.getElementById('salaryID').value;
+
+            // Get other salary details from the form
+            var month = document.getElementById('month').value;
+            var year = document.getElementById('year').value;
+            var basicSalary = document.getElementById('basicSalary').value;
+            var deduction = document.getElementById('deduction').value;
+
+            // Construct the updated salary object
+            var updatedSalaryData = {
+                employee_id: parseInt(employeeID),
+                salary_id: parseInt(salaryID),
+                month: month,
+                year: parseInt(year),
+                basic_salary: parseInt(basicSalary),
+                deduction: parseInt(deduction)
+            };
+
+            // Send PUT request to update salary details
+            fetch('http://localhost:8080/employees/salary-slip/' + employeeID + '/' + salaryID, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer ' + token
+                },
+                body: JSON.stringify(updatedSalaryData)
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Failed to update salary details');
+                }
+                return response.text();
+            })
+            .then(message => {
+                // Display success message
+                alert(message);
+            })
+            .catch(error => {
+                console.error('Error updating salary details:', error);
+                // Display error message
+                alert('Failed to update salary details. Please try again.');
+            });
+        }
+
+        // Event listener for form submission
+        document.getElementById('salaryUpdateForm').addEventListener('submit', function(event) {
+            event.preventDefault(); // Prevent the form from submitting
+            updateSalaryDetails(); // Call function to update salary details
+        });
+    </script>
+</body>
+</html>

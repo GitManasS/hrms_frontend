@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Get Employee Details</title>
+</head>
+<body>
+    <div class="container">
+        <h1>Get Employee Details</h1>
+        <form id="employeeForm">
+            <div class="form-group">
+                <label for="employeeID">Enter Employee ID:</label>
+                <input type="number" class="form-control" id="employeeID" required>
+            </div>
+            <button type="submit" class="btn btn-primary">Get Details</button>
+        </form>
+        <div id="employeeDetailsContainer"></div>
+    </div>
+
+    <script>
+        // Function to retrieve JWT token from local storage
+        function getToken() {
+            var token = localStorage.getItem('token');
+            if (!token) {
+                // Redirect to login page if token is missing
+                window.location.href = '../login.html';
+            }
+            return token;
+        }
+
+        // Function to display employee details
+        function displayEmployeeDetails(employeeID) {
+            var employeeDetailsContainer = document.getElementById('employeeDetailsContainer');
+
+            // Retrieve token from local storage
+            var token = getToken();
+
+            // Fetch employee details from the server with authentication
+            fetch('http://localhost:8080/employees/details/' + employeeID, {
+                headers: {
+                    'Authorization': 'Bearer ' + token
+                }
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Failed to fetch employee details');
+                }
+                return response.json();
+            })
+            .then(employee => {
+                // Construct HTML to display employee details
+                var html = '<h2>Employee Details</h2>';
+                html += '<ul>';
+                html += '<li>Employee ID: ' + employee.EmployeeID + '</li>';
+                html += '<li>Manager ID: ' + employee.ManagerID + '</li>';
+                html += '<li>First Name: ' + employee.FirstName + '</li>';
+                html += '<li>Last Name: ' + employee.LastName + '</li>';
+                html += '<li>Birth Date: ' + employee.BirthDate + '</li>';
+                html += '<li>Contact Info: ' + employee.ContactInfo + '</li>';
+                html += '<li>Department ID: ' + employee.DepartmentID + '</li>';
+                html += '<li>Hire Date: ' + employee.HireDate + '</li>';
+                html += '<li>Position: ' + employee.Position + '</li>';
+                html += '<li>Department: ' + employee.Department + '</li>';
+                html += '<li>Username: ' + employee.Username + '</li>';
+                html += '<li>Email ID: ' + employee.EmailID + '</li>';
+                html += '</ul>';
+
+                // Display employee details in the container
+                employeeDetailsContainer.innerHTML = html;
+            })
+            .catch(error => {
+                console.error('Error fetching employee details:', error);
+                // Display error message in case of failure
+                employeeDetailsContainer.textContent = 'Failed to fetch employee details. Please try again.';
+            });
+        }
+
+        // Event listener for form submission
+        document.getElementById('employeeForm').addEventListener('submit', function(event) {
+            event.preventDefault(); // Prevent the form from submitting
+
+            // Get employee ID entered by the user
+            var employeeID = document.getElementById('employeeID').value;
+
+            // Call the function to display employee details
+            displayEmployeeDetails(employeeID);
+        });
+    </script>
+</body>
+</html>

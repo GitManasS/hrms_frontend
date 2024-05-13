@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Update User Information</title>
+</head>
+<body>
+    <div class="container">
+        <h1>Update User Information</h1>
+        <form id="updateUserForm">
+            <div class="form-group">
+                <label for="userID">User ID:</label>
+                <input type="number" class="form-control" id="userID" required>
+            </div>
+            <div class="form-group">
+                <label for="username">Username:</label>
+                <input type="text" class="form-control" id="username" required>
+            </div>
+            <div class="form-group">
+                <label for="password">Password:</label>
+                <input type="password" class="form-control" id="password" required>
+            </div>
+            <div class="form-group">
+                <label for="email">Email:</label>
+                <input type="email" class="form-control" id="email" required>
+            </div>
+            <div class="form-group">
+                <label for="role">Role:</label>
+                <select class="form-control" id="role" required>
+                    <option value="employee">Employee</option>
+                    <option value="admin">Admin</option>
+                    <option value="superadmin">Superadmin</option>
+                </select>
+            </div>
+            <button type="submit" class="btn btn-primary">Update User</button>
+        </form>
+    </div>
+
+    <script>
+        // Function to retrieve JWT token from local storage
+        function getToken() {
+            var token = localStorage.getItem('token');
+            if (!token) {
+                // Redirect to login page if token is missing
+                window.location.href = '../login.html';
+            }
+            return token;
+        }
+    
+        // Function to update user information
+        function updateUser() {
+            var token = getToken();
+    
+            // Retrieve user ID and other details from the form
+            var userID = document.getElementById('userID').value;
+            var username = document.getElementById('username').value;
+            var password = document.getElementById('password').value;
+            var email = document.getElementById('email').value;
+            var role = document.getElementById('role').value;
+    
+            // Construct the updated user object
+            var updatedUserData = {
+                user_id: parseInt(userID),
+                username: username,
+                password: password,
+                email: email,
+                role: role
+            };
+    
+            // Send PUT request to update user information
+            fetch('http://localhost:8080/register/' + userID, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer ' + token
+                },
+                body: JSON.stringify(updatedUserData)
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Failed to update user information');
+                }
+                return response.text();
+            })
+            .then(message => {
+                // Display success message
+                alert(message);
+            })
+            .catch(error => {
+                console.error('Error updating user information:', error);
+                // Display error message
+                alert('Failed to update user information. Please try again.');
+            });
+        }
+    
+        // Event listener for form submission
+        document.getElementById('updateUserForm').addEventListener('submit', function(event) {
+            event.preventDefault(); // Prevent the form from submitting
+            updateUser(); // Call function to update user information
+        });
+    </script>
+    
+</body>
+</html>

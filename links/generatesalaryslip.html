@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Generate Salary Slip</title>
+</head>
+<body>
+    <div class="container">
+        <h1>Generate Salary Slip</h1>
+        <form id="salarySlipForm">
+            <div class="form-group">
+                <label for="employeeID">Employee ID:</label>
+                <input type="text" class="form-control" id="employeeID" required>
+            </div>
+            <div class="form-group">
+                <label for="month">Month:</label>
+                <input type="text" class="form-control" id="month" required>
+            </div>
+            <div class="form-group">
+                <label for="year">Year:</label>
+                <input type="number" class="form-control" id="year" required>
+            </div>
+            <div class="form-group">
+                <label for="basicSalary">Basic Salary:</label>
+                <input type="number" class="form-control" id="basicSalary" required>
+            </div>
+            <div class="form-group">
+                <label for="deduction">Deduction:</label>
+                <input type="number" class="form-control" id="deduction" required>
+            </div>
+            <button type="submit" class="btn btn-primary">Generate Salary Slip</button>
+        </form>
+    </div>
+
+    <script>
+        // Function to retrieve JWT token from local storage
+        function getToken() {
+            var token = localStorage.getItem('token');
+            if (!token) {
+                // Redirect to login page if token is missing
+                window.location.href = '../login.html';
+            }
+            return token;
+        }
+
+        // Function to generate salary slip
+        function generateSalarySlip() {
+            var token = getToken();
+
+            // Get employee ID from the form
+            var employeeID = document.getElementById('employeeID').value;
+
+            // Get salary slip details from the form
+            var month = document.getElementById('month').value;
+            var year = document.getElementById('year').value;
+            var basicSalary = document.getElementById('basicSalary').value;
+            var deduction = document.getElementById('deduction').value;
+
+            // Construct the salary slip object
+            var salarySlipData = {
+                employee_id: parseInt(employeeID),
+                month: month,
+                year: parseInt(year),
+                basic_salary: parseInt(basicSalary),
+                deduction: parseInt(deduction)
+            };
+
+            // Send POST request to generate salary slip
+            fetch('http://localhost:8080/employees/salary-slip/' + employeeID, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer ' + token
+                },
+                body: JSON.stringify(salarySlipData)
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Failed to generate salary slip');
+                }
+                return response.text();
+            })
+            .then(message => {
+                // Display success message
+                alert(message);
+            })
+            .catch(error => {
+                console.error('Error generating salary slip:', error);
+                // Display error message
+                alert('Failed to generate salary slip. Please try again.');
+            });
+        }
+
+        // Event listener for form submission
+        document.getElementById('salarySlipForm').addEventListener('submit', function(event) {
+            event.preventDefault(); // Prevent the form from submitting
+            generateSalarySlip(); // Call function to generate salary slip
+        });
+    </script>
+</body>
+</html>
